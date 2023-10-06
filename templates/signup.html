@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="signup-container">
+        <div class="container" id="div1">
+            <h1 class="type-write-box">
+                <a href="" class="typewrite text-light" data-period="2000" data-type='[ "A World of Terrain.", "Landscapes at a Glance.", "Terrain Tales.", "Land Cover Chronicles." ]'>
+                    <span class="wrap"></span>
+                </a>
+            </h1>
+        </div>
+
+        <div class="container" id="div2">
+            {% include 'alert.html' %}
+            <a class="btn btn-light text-dark rounded float-left" href="{% url 'home' %}"><b><</b> Back</a>
+            <h2 class="container-fluid text-center align-center mt-5">Sign Up</h2>
+            <form method="post" id="signup-form" class="container">
+
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username</label>
+                    <br>
+                    {{ uform.username }}
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <br>
+                    {{ uform.email }}
+                </div>
+
+                <div class="form-group">
+                    <label>First name</label>
+                    <br>
+                    {{ uform.first_name }}
+                </div>
+
+                <div class="form-group">
+                    <label>Last name</label>
+                    <br>
+                    {{ uform.last_name }}
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <br>
+                    {{ uform.password1 }}
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm password</label>
+                    <br>
+                    {{ uform.password2 }}
+                </div>
+
+                <input type="submit" value="Signup" class="btn btn-primary mt-3">
+            </form>
+            <a class="container-fluid" href="{% url 'signin' %}">Already have an account?</a>
+        </div>
+    </div>
+{% endblock %}

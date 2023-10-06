@@ -1,0 +1,409 @@
+/* SCROLL BAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(30, 30, 30);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #007bff;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #007bff;
+}
+
+
+
+/* NAVIGATION CSS */
+#nav-bar{
+    background:rgb(0, 0, 0);
+    height:75px;
+}
+
+#nav-bar > a{
+    margin-left:25px;
+    display:inline-block;
+    margin-top:20px;
+    padding:15px;
+    text-decoration:none;
+    background:rgb(40, 40, 40);
+    border-top-right-radius:10px;
+    border-top-left-radius:10px;
+}
+
+#nav-bar > a:hover{
+    background: #007bff;
+    color:rgb(255, 255, 255);
+    /*border-top-right-radius:10px;
+    border-top-left-radius:10px;*/
+    transition:background 0.5s;
+}
+
+#drop-btn{
+    float:right;
+    display:block;
+    margin-top:25px;
+}
+
+.dropdown-content{
+    width: 200px;
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    background: rgb(255, 255, 255);
+    right: 70px;
+    margin-top:7px;
+}
+
+.dropdown-content > a{
+    padding:10px;
+}
+
+.dropdown-content > a:hover {
+    background:#007bff;
+    color:rgb(255, 255, 255);
+}
+
+
+/* HOME CSS */
+#home-div1{
+    display:block;
+    height:90vh;
+    background-image:url('./img/main.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+#home-div2{
+    display:block;
+    height:90vh;
+    background:rgb(0, 0, 0);
+}
+
+#home-div2 > h1{
+    text-align:center;
+    display:block;
+    position:relative;
+    top:40%;
+}
+
+#home-div3{
+    display:flex;
+    height:90vh;
+    background:rgb(50, 50, 50);
+}
+
+#des1{
+    width:500px;
+    height:500px;
+    margin-top:5%;
+    overflow:hidden;
+}
+
+#des1 > div{
+    background-image:url('./img/image-classify.png');
+    background-position: center;
+    background-size:500px 300px;
+    height:200px;
+    border-radius:10px;
+    transition:all 0.5s;
+}
+
+#des1 > div:hover{
+    background-size:700px 500px;
+}
+
+#des1 > p{
+    text-align:justify;
+}
+
+#des2{
+    width:500px;
+    height:500px;
+    margin-top:5%;
+    overflow:hidden;
+}
+
+
+#des2 > div{
+    background-image:url('./img/land-seg.jpg');
+    background-position: center;
+    background-size:500px 300px;
+    height:200px;
+    border-radius:10px;
+    transition:all 0.5s;
+}
+
+#des2 > div:hover{
+    background-size:700px 500px;
+}
+
+#des2 > p{
+    text-align:justify;
+}
+
+
+#home-div4{
+    display:block;
+    height:90vh;
+}
+
+#lcc-logo{
+    width:260px;
+    height:260px;
+    position:absolute;
+    left:0;
+    right:0;
+    top:25%;
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+}
+
+#lcc-logo-caption{
+    top:65%;
+    position:absolute;
+    left:0;
+    right:0;
+    text-align:center;
+    display:block;
+    width:100%;
+}
+
+/* SIGN UP CSS */
+.signup-container{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background: rgb(0, 0, 0);
+}
+
+.type-write-box{
+    margin-top:40%;
+    text-align:center;
+}
+
+#div1{
+    width: 100%;
+    height: 100%;
+    background-image: url("./img/satelite.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+#div2{
+    width:40%;
+    height:100%;
+    background: white !important;
+}
+
+
+#signup-form{
+    width: 70%;
+    display:flex;
+    flex-direction: column;
+    margin-top: 30px;
+    row-gap: 1px;
+}
+
+.form-group > label{
+    text-align:left;
+}
+
+.form-group > input{
+    width:100%;
+    margin-top:-10px;
+}
+
+#div2 > a{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:10px;
+    text-align:center;
+}
+
+
+/* ALERT CSS */
+#alert-box{
+    z-index:999;
+    position:absolute;
+    width:25%;
+    top:5%;
+    border-radius:10px;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+/* DASHBOARD CSS */
+.dashboard-container{
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-direction:row;
+}
+
+
+#dashboard-side-panel{
+    background-image: linear-gradient(317deg, #192d74, #06adf1);
+    height:100vh;
+    width:20%;
+    position:fixed;
+    left:0;
+    display:flex;
+    flex-direction:column;
+    padding:10px;
+}
+
+
+#dashboard-side-panel > button{
+    height:200px;
+    margin-bottom:10px;
+    background-position: center;
+    background-size: cover;
+    border:0;
+    filter: grayscale(100%);
+    transition: all 0.5s;
+}
+
+#dashboard-side-panel > button:hover{
+    filter: grayscale(0%);
+}
+
+
+#dashboard-side-panel > button > span{
+    position:absolute;
+    display:block;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+    font-weight:bold;
+    pointer-events: none;
+    color:rgb(255, 255, 255);
+}
+
+
+#view-panel{
+    background:rgb(255, 255, 255);
+    height:100vh;
+    width:80%;
+    position:absolute;
+    right:0;
+    margin:0;
+    padding:0;
+}
+
+
+/* IMAGE CLASSIFY CSS */
+#img-c{
+    width:100%;
+    height:100vh;
+    display:block;
+    overflow-y:scroll;
+}
+
+#img-classify{
+    border: 2px solid black;
+    border-radius: 10px;
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:80%;
+    height:50vh;
+    margin-top:5%;
+    transition: all 0.5s;
+}
+
+#img-classify:hover{
+    border:2px solid #007bff;
+}
+
+#img-classify:hover span svg{
+    fill: #007bff;
+}
+
+#img-classify > span{
+    display:block;
+    position:absolute;
+    text-align:center;
+    top:30%;
+    left:0;
+    right:0;
+}
+
+
+#img-classify > span > svg{
+    fill: #6c757d;
+}
+
+#file-upload-label{
+    width:100%;
+}
+
+
+#image-classify-form > input[type='submit']{
+    display:block;
+    position:relative;
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:10px;
+    width:25%;
+}
+
+/* IMAGE SEGMENT CSS */
+#img-s{
+    width:100%;
+    height:100vh;
+    display:block;
+    overflow-y:scroll;
+}
+
+/* RECENT IMAGE */
+#rec-img{
+    width:100%;
+    height:100vh;
+    display:block;
+    overflow-y:scroll;
+}
+
+
+.img-container{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-wrap:wrap;
+    align-content: flex-start;
+    justify-content: center;
+}
+
+.user-imgs{
+    width:250px;
+    height:200px;
+    background-position: center;
+    background-size: 200px 200px;
+    border:2px solid black;
+    border-radius:10px;
+    margin-left:15px;
+    margin-top:10px;
+    margin-bottom:10px;
+    transition: all 0.4s;
+}
+
+.user-imgs:hover{
+    background-size:250px 250px;
+}
+
+
+

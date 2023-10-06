@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+<style>
+    #dashboard-side-panel > button[value="{{ dash_panel }}"]{
+        filter:grayscale(0%);
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="container" id="dashboard-side-panel">
+
+        <button class="container-fluid bg-light rounded dash-nav-btn" style="background-image:url({% static 'css/img/usgs-jePzo7RYzac-unsplash.jpg' %});" value="0"><span>Image Classify</span></button>
+        <button class="container-fluid bg-light rounded dash-nav-btn" style="background-image:url({% static 'css/img/land-seg.jpg' %});" value="1"><span>Image Segmentation</span></button>
+        <button class="container-fluid bg-light rounded dash-nav-btn" style="background-image:url({% static 'css/img/nasa-6-jTZysYY_U-unsplash.jpg' %});" value="2"><span>Recent Image</span></button>
+
+    </div>
+
+    <div class="container-fluid" id="view-panel">
+        {% if dash_panel == '0' %}
+        {% include 'image-classify.html' %}
+        {% elif dash_panel == '1' %}
+        {% include 'image-segment.html' %}
+        {% elif dash_panel == '2' %}
+        {% include 'recent-imgs.html' %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

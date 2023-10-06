@@ -1,20 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="ea67f026-1797-440b-b67d-3d71e4de56ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/detect_map/serializer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modal/landcover_classifier/fingerprint.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modal/landcover_classifier/keras_metadata.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modal/landcover_classifier/saved_model.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modal/landcover_classifier/variables/variables.data-00000-of-00001" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modal/landcover_classifier/variables/variables.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/landcover.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/landcover.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/detect_map/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/detect_map/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/detect_map/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/detect_map/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detect_map/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/detect_map/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detect_map/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/detect_map/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.css.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Navbar.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Pages/Home.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Pages/Login.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Pages/Register.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Routes.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Routes.jsx.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assests/img/defaultImage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assests/img/home_back.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assests/img/main.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/img/main.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.js.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/setupTests.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/landcover/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/landcover/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/landcover/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/landcover/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modal/landcover_classifier/fingerprint.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modal/landcover_classifier/keras_metadata.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modal/landcover_classifier/saved_model.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modal/landcover_classifier/variables/variables.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modal/landcover_classifier/variables/variables.index" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +61,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -34,6 +71,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2RM9hNwvZwkY6kpP7vaCCmfVWyu" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -41,16 +81,25 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/ROOT/PycharmProjects/landcover",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/PycharmProjects/LandCoverClassification/static/css/img",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PycharmProjects\LandCoverClassification\static\css\img" />
+      <recent name="D:\PycharmProjects\LandCoverClassification\static\img" />
       <recent name="C:\Users\ROOT\PycharmProjects\landcover" />
       <recent name="C:\Users\ROOT\PycharmProjects\landcover\modal" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PycharmProjects\LandCoverClassification\media" />
+      <recent name="D:\PycharmProjects\LandCoverClassification\static\css" />
+      <recent name="D:\PycharmProjects\LandCoverClassification\static\img" />
     </key>
   </component>
   <component name="RunManager">

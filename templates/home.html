@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{%  load static %}
+{% block content %}
+{% include 'navigation.html' %}
+<div class="container-fluid bg-dark" id="home-div1">
+    <img src="{% static 'css/img/lcc-logo.png' %}" id="lcc-logo">
+    <h2 class="container text-light" id="lcc-logo-caption">Land Cover Classification</h2>
+</div>
+
+<div class="container-fluid" id="home-div2">
+    <h1>
+        <a href="" class="typewrite text-light display-2" data-period="2000" data-type='[ "Explore Earth`s Beauty.", "Discover Our Planet`s Diversity.", "Mapping Mother Earth.", "Land Cover Chronicles.", "Journey Through Habitats", "Visualizing Earth`s Surface." ]'>
+            <span class="wrap"></span>
+        </a>
+    </h1>
+</div>
+
+<div class="container-fluid" id="home-div3">
+    <div class="container" id="des1">
+        <h4 class="text-light">Classification</h4>
+        <div class="container-fluid"></div>
+        <p class="text-light pt-4">Classification is the process of categorizing and labeling different land cover types or classes based on their distinct visual or physical characteristics. It plays a crucial role in understanding and managing our environment by identifying and differentiating areas of forests, urban development, water bodies, agriculture, and more. Through advanced techniques and technologies, land cover classification helps us gain valuable insights into the Earth's surface, enabling better decision-making for conservation, urban planning, agriculture, and environmental monitoring.</p>
+    </div>
+
+    <div class="container" id="des2">
+        <h4 class="text-light">Segmentation</h4>
+        <div class="container-fluid"></div>
+        <p class="text-light pt-4">Segmentation is a computer vision and image processing technique that involves dividing an image or a region into distinct and meaningful segments or regions based on shared attributes, such as color, texture, or intensity. It is a fundamental process in image analysis that helps in isolating and identifying objects or regions of interest within an image, making it an essential tool in fields like medical imaging, object detection, and scene understanding. Segmentation allows for a more detailed and accurate analysis of visual data, aiding in tasks like object recognition and tracking.</p>
+    </div>
+</div>
+
+<div class="container-fluid" id="home-div4">
+
+</div>
+
+{% endblock %}

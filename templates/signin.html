@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="signup-container">
+        <div class="container" id="div1">
+            <h1 class="type-write-box">
+                <a href="" class="typewrite text-light" data-period="2000" data-type='[ "Discovering Biodiversity.", "Geography in Focus.", "Natural Wonders Unveiled.", "Unearth Landscapes." ]'>
+                    <span class="wrap"></span>
+                </a>
+            </h1>
+        </div>
+
+        <div class="container" id="div2">
+            {% include 'alert.html' %}
+            <a class="btn btn-light text-dark rounded float-left" href="{% url 'home' %}"><b><</b> Back</a>
+            <h2 class="container-fluid text-center" style="margin-top:30%;">Sign In</h2>
+            <form method="post" id="signup-form" class="container">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="su-username">Username</label>
+                    <br>
+                    <input type="text" name="username" placeholder="Username..." class="username" id="su-username">
+                </div>
+
+                <div class="form-group">
+                    <label for="su-password">Password</label>
+                    <br>
+                    <input type="password" name="password" placeholder="Password..." class="password" id="su-password">
+                </div>
+
+                <input type="submit" value="Signup" class="btn btn-primary mt-3">
+            </form>
+            <a class="container-fluid" href="{% url 'signup' %}">Don't have an account?</a>
+        </div>
+    </div>
+{% endblock %}

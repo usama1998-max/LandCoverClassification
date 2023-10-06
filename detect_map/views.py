@@ -1,15 +1,19 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+import json
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .serializer import UserSerializer, UserLoginSerializer
+from .models import Images
 from django.contrib.auth import login, logout, authenticate
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import make_password
+from .forms import CreateUserForm
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from PIL import Image
 import numpy as np
 import tensorflow as tf
 import cv2
+from django.http import QueryDict
+
 
 classes = [
     'AnnualCrop',
@@ -27,75 +31,106 @@ classes = [
 model = tf.keras.models.load_model("./modal/landcover_classifier")
 
 
-def refresh_user_tkn(user):
-    token = RefreshToken.for_user(user)
-
-    return {"refresh": str(token), "access": str(token.access_token)}
-
-
-@api_view(["POST"])
-def register(request):
-    us = UserSerializer(data=request.data)
-
-    if us.is_valid() is True:
-        user = User(username=request.data['username'])
-        hash_pass = make_password(request.data['password'])
-        user.password = hash_pass
-        user.save()
-
-        tkn = refresh_user_tkn(user)
-        return Response({"status": "success", "msg": "User created successfully", "token": tkn})
-    else:
-        print(us.errors)
-        return Response(us.errors)
-
-
-@api_view(["POST"])
-def login_user(request):
-    uls = UserLoginSerializer(data=request.data)
-    if uls.is_valid() is True:
-        username = uls.data['username']
-        password = uls.data['password']
-
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user is not None:
-            uid = User.objects.get(username=user)
-            tkn = refresh_user_tkn(user)
-            return Response({"status": "success",
-                             "token": tkn,
-                             "msg": "You are now logged in!",
-                             "username": str(uid.username)})
-        else:
-            return Response({"status": "error", "msg": "Invalid Credentials"})
-    else:
-        return Response(uls.errors)
-
-
-@api_view(["GET", "POST"])
-def logout_user(request):
-    return Response({"msg": "User"})
-
-
-@api_view(["POST"])
-def image_classify(request):
+def check_user_email(email: str) -> bool:
     try:
-        file = request.FILES['media']
-        img = Image.open(file)
-        img_arr = np.array(img)
-        nsam = tf.image.resize(img_arr, (128, 128))
-        ndims = np.expand_dims(nsam/255, 0)
-        prediction = model.predict(ndims)
-        label = np.argmax(prediction)
-        category = classes[int(label)]
-
-        return Response({"msg": "success", "category": category})
-    except Exception as e:
-        print(e)
-        return Response({"msg": "Server Error"})
+        User.objects.get(email=email)
+        return True
+    except ObjectDoesNotExist:
+        return False
 
 
-@api_view(["GET", "POST"])
+def home(request):
+    request.session['dash_panel'] = "0"
+    request.session.modified = True
+    return render(request, "home.html", {"title": "Home"})
+
+
+def register(request):
+    cuf = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+
+        if form.is_valid():
+            if check_user_email(form.cleaned_data['email']) is True:
+                messages.error(request, "Email already exists")
+            else:
+                form.save()
+
+                messages.success(request, "Your account has been created, you can now login.")
+                return redirect('signin')
+        else:
+            messages.error(request, form.errors)
+
+    return render(request, "signup.html", {
+                                                                "title": "Signup",
+                                                                "uform": cuf
+                                                               })
+
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "You are now logged in.")
+            return redirect('home')
+        else:
+            messages.error(request, "Username or password is incorrect!")
+
+    return render(request, "signin.html", {"title": "Signin"})
+
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, "Logged out")
+    return redirect('home')
+
+
+def profile(request):
+    return render(request, "profile.html", {"title": f"Welcome {request.user.username}"})
+
+
+def dashboard(request):
+    imgs = Images.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        print(request.POST)
+
+        if 'dash_panel' in request.POST:
+            request.session['dash_panel'] = request.POST['dash_panel']
+            request.session.modified = True
+
+            return JsonResponse({"dash_panel": request.session['dash_panel']})
+
+        if 'image_classify' in request.POST:
+            print("Classification")
+
+        if 'image_segment' in request.POST:
+
+            user = User.objects.get(username=request.user.username)
+
+            img = Images()
+            img.img = request.FILES['img']
+            img.user = user
+            img.save()
+
+            return redirect('dashboard')
+
+    return render(request, "dashboard.html", {
+        "title": "Dashboard",
+        "dash_panel": request.session['dash_panel'],
+        "imgs": imgs
+    })
+
+
+def image_classify(request):
+    ...
+
+
 def image_segment(request):
-    return Response({"msg": "User"})
-
+    ...
