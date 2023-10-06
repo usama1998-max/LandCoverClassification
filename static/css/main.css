@@ -78,6 +78,12 @@
     background-image:url('./img/main.jpg');
     background-position: center;
     background-size: cover;
+    padding:0;
+}
+
+#home-div1 > div{
+    background:rgba(0, 0, 0, 0.5);
+    height:90vh;
 }
 
 #home-div2{
@@ -353,7 +359,7 @@
 }
 
 
-#image-classify-form > input[type='submit']{
+#image-classify-form > input[type='submit'], #image-segment-form > input[type='submit']{
     display:block;
     position:relative;
     margin-right:auto;
