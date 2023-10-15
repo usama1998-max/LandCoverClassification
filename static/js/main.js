@@ -129,33 +129,77 @@ for(var i=0;i<dash_nav_btn.length;i++){
 }
 
 
+// IMAGE INPUT
+var img_c_input = document.querySelector("#img-classify-input");
+
+// IMAGE CLASSIFY
+var img_c_file = document.querySelector("#img-classify");
+
+if(img_c_file !== null){
+    img_c_file.addEventListener("dragenter", function(e){
+        e.preventDefault();
+        console.log('DRAG OVER EVENT');
+        img_c_file.style.border = "2px dashed #007bff";
+    });
+
+    img_c_file.addEventListener("dragover", (e) => {
+        e.preventDefault();
+    });
+
+    img_c_file.addEventListener("dragleave", function(e){
+        console.log('DRAG LEAVE EVENT');
+        img_c_file.style.border = "2px solid #6c757d";
+    });
+
+    img_c_file.addEventListener("drop", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        let droppedFile = e.dataTransfer.files[0];
+        if (droppedFile) {
+            img_c_input.value = droppedFile.name;
+            console.log("IMAGE DROPPED" + droppedFile.name);
+        }
+
+        console.log('DROP EVENT');
+    });
+}
 
 
 // IMAGE SEGMENT
-//if(img_s_panel != undefined){
-//    var image_segment_form = document.querySelector("#image-segment-form");
-
-//    image_segment_form.addEventListener('submit', function(e){
-//        e.preventDefault();
+var img_c_file = document.querySelector("#img-classify");
 
 
-//        $.ajax({
-//            type: "POST",
-//            url: "/dashboard/",
-//            dataType: "json",
-//            processData: false,
-//            contentType: false,
-//            data: {image_segment: true, user: image_segment_form[0].value},
-//            success: function(res){
-//                console.log(res);
-//                image_segment_form.reset();
-//            },
-//            error: function(res){
-//                console.log(res);
-//            }
-//        });
-//    });
-// }
+var img_s_input = document.querySelector("#image-segment-input");
 
+if(img_s_file !== null){
+    img_c_file.addEventListener("dragenter", function(e){
+        e.preventDefault();
+        console.log('DRAG OVER EVENT');
+        img_c_file.style.border = "2px dashed #007bff";
+    });
+
+    img_c_file.addEventListener("dragover", (e) => {
+        e.preventDefault();
+    });
+
+    img_c_file.addEventListener("dragleave", function(e){
+        console.log('DRAG LEAVE EVENT');
+        img_c_file.style.border = "2px solid #6c757d";
+    });
+
+    img_c_file.addEventListener("drop", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        let droppedFile = e.dataTransfer.files[0];
+        if (droppedFile) {
+            img_c_input.value = droppedFile.name;
+            console.log("IMAGE DROPPED" + droppedFile.name);
+        }
+
+        console.log('DROP EVENT');
+    });
+}
 
 

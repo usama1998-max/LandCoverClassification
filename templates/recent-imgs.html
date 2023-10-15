@@ -1,9 +1,40 @@
 <div id="rec-img">
     <div class="img-container">
-        {% for img in imgs %}
+        {% for img in imgs.object_list %}
 
         <div class="user-imgs" style="background-image:url('{{ img.img.url }}');"></div>
 
         {% endfor %}
+
+        <nav aria-label="Page navigation example" style="display:block; position:fixed; bottom:-5px; z-index:999;">
+          <ul class="pagination">
+              {% if page_no.has_previous %}
+                    <li class="page-item"><a class="page-link" href="{% url 'dashboard' %}?page={{ page_no.previous_page_number }}">Previous</a></li>
+              {% endif %}
+
+            <li class="page-item"><a {% if page_no == '1' %}
+                    class="page-link bg-primary text-light"
+                {% else %}
+                    class="page-link"
+                {% endif %} href="#">1</a></li>
+
+            <li class="page-item"><a {% if page_no == '2' %}
+                    class="page-link bg-primary text-light"
+                {% else %}
+                    class="page-link"
+                {% endif %} href="#">2</a></li>
+
+            <li class="page-item"><a {% if page_no == '3' %}
+                    class="page-link bg-primary text-light"
+                {% else %}
+                    class="page-link"
+                {% endif %} href="#">3</a></li>
+
+              {% if page_no.has_next %}
+              <li class="page-item"><a class="page-link" href="{% url 'dashboard' %}?page={{ page_no.next_page_number }}">Next</a></li>
+              {% endif %}
+          </ul>
+        </nav>
     </div>
+
 </div>

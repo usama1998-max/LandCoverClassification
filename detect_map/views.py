@@ -13,7 +13,7 @@ import numpy as np
 import tensorflow as tf
 import cv2
 from django.http import QueryDict
-
+from django.core.paginator import Paginator
 
 classes = [
     'AnnualCrop',
@@ -96,7 +96,11 @@ def profile(request):
 
 
 def dashboard(request):
+
     imgs = Images.objects.filter(user=request.user)
+    paginator = Paginator(imgs, 12)
+    page_no = request.GET.get('page')
+    page = paginator.get_page(page_no)
 
     if request.method == 'POST':
         print(request.POST)
@@ -104,27 +108,45 @@ def dashboard(request):
         if 'dash_panel' in request.POST:
             request.session['dash_panel'] = request.POST['dash_panel']
             request.session.modified = True
-
             return JsonResponse({"dash_panel": request.session['dash_panel']})
 
         if 'image_classify' in request.POST:
-            print("Classification")
+            if len(request.FILES) > 0:
+
+                user = User.objects.get(username=request.user.username)
+
+                img = Images()
+                img.img = request.FILES['img']
+                img.user = user
+                img.save()
+                print("Classification")
+
+            else:
+                messages.error(request, "You need to upload image first")
+
+            return redirect('dashboard')
 
         if 'image_segment' in request.POST:
 
-            user = User.objects.get(username=request.user.username)
+            if len(request.FILES) > 0:
 
-            img = Images()
-            img.img = request.FILES['img']
-            img.user = user
-            img.save()
+                user = User.objects.get(username=request.user.username)
+
+                img = Images()
+                img.img = request.FILES['img']
+                img.user = user
+                img.save()
+
+            else:
+                messages.error(request, "You need to upload image first")
 
             return redirect('dashboard')
 
     return render(request, "dashboard.html", {
         "title": "Dashboard",
         "dash_panel": request.session['dash_panel'],
-        "imgs": imgs
+        "imgs": page,
+        "page_no": page
     })
 
 
