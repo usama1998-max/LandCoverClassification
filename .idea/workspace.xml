@@ -7,8 +7,27 @@
     <list default="true" id="ea67f026-1797-440b-b67d-3d71e4de56ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/detect_map/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/detect_map/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/09_Esfera.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/Screenshot_2023-09-17_171700.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/Screenshot_2023-09-27_230154.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/Screenshot_2023-09-27_230746.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/Screenshot_2023-09-27_231807.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/Screenshot_2023-09-27_231807_CELb0ZJ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/Screenshot_2023-09-27_231807_VMfwjcR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/lcc-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/nasa-6-jTZysYY_U-unsplash.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/ss.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/usgs-XRwXU14AMOU-unsplash.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/usgs-jePzo7RYzac-unsplash.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_imgs/valogo-light_-cutout.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/image-classify.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/image-classify.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/image-segment.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/image-segment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/recent-imgs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/recent-imgs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,19 +56,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/PycharmProjects/LandCoverClassification/static/css/img&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/PycharmProjects/LandCoverClassification/static/css/img",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\PycharmProjects\LandCoverClassification\static\css\img" />
+      <recent name="D:\PycharmProjects\LandCoverClassification" />
       <recent name="D:\PycharmProjects\LandCoverClassification\static\img" />
       <recent name="C:\Users\ROOT\PycharmProjects\landcover" />
       <recent name="C:\Users\ROOT\PycharmProjects\landcover\modal" />
@@ -61,7 +81,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="test_api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="landcover" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -73,7 +93,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_api.py" />
+      <option name="SCRIPT_NAME" value="D:\PycharmProjects\LandCoverClassification\test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -82,11 +102,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.test_api" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

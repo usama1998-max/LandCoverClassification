@@ -412,5 +412,13 @@
     box-shadow:2px 2px 10px black;
 }
 
+#empty-img{
+    margin-top:250px;
+    text-align:center;
+}
+
+#empty-img > svg {
+    fill:gray;
+}
 
 

@@ -1,19 +1,16 @@
-import json
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import Images
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.hashers import make_password
 from .forms import CreateUserForm
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from PIL import Image
-import numpy as np
 import tensorflow as tf
 import cv2
-from django.http import QueryDict
 from django.core.paginator import Paginator
+import numpy as np
+
 
 classes = [
     'AnnualCrop',
@@ -27,6 +24,26 @@ classes = [
     'River',
     'SeaLake'
 ]
+
+
+def segment_image(img_url, username):
+    img = cv2.imread(img_url, 0)
+    rimg = cv2.resize(img, (500, 500))
+    _, thresholded1 = cv2.threshold(rimg, 140, 255, cv2.THRESH_BINARY_INV)
+    _, thresholded2 = cv2.threshold(rimg, 150, 255, cv2.THRESH_TRIANGLE)
+    _, labels1 = cv2.connectedComponents(thresholded1)
+    _, labels2 = cv2.connectedComponents(thresholded2)
+    preview1 = np.zeros((rimg.shape[0], rimg.shape[1], 3), dtype=np.uint8)
+    preview2 = np.zeros((rimg.shape[0], rimg.shape[1], 3), dtype=np.uint8)
+    preview1[labels1 == 0] = (0, 255, 0)
+    preview2[labels2 == 0] = (0, 0, 255)
+
+    file_path = img_url.split('/')
+    filename = file_path[-1].split('.')[0]
+
+    cv2.imwrite(f"../media/land_{filename}_{username}.png", preview1)
+    cv2.imwrite(f"../media/water_{filename}_{username}.png", preview2)
+
 
 model = tf.keras.models.load_model("./modal/landcover_classifier")
 
@@ -110,7 +127,7 @@ def dashboard(request):
             request.session.modified = True
             return JsonResponse({"dash_panel": request.session['dash_panel']})
 
-        if 'image_classify' in request.POST:
+        if 'upload_img' in request.POST:
             if len(request.FILES) > 0:
 
                 user = User.objects.get(username=request.user.username)
@@ -119,28 +136,22 @@ def dashboard(request):
                 img.img = request.FILES['img']
                 img.user = user
                 img.save()
-                print("Classification")
-
+                print("Image Uploaded")
+                messages.success(request, "Image Uploaded successfully, Check recent image tab.")
             else:
                 messages.error(request, "You need to upload image first")
+
+            return redirect('dashboard')
+
+        if 'image_classify' in request.POST:
 
             return redirect('dashboard')
 
         if 'image_segment' in request.POST:
 
-            if len(request.FILES) > 0:
-
-                user = User.objects.get(username=request.user.username)
-
-                img = Images()
-                img.img = request.FILES['img']
-                img.user = user
-                img.save()
-
-            else:
-                messages.error(request, "You need to upload image first")
-
             return redirect('dashboard')
+
+
 
     return render(request, "dashboard.html", {
         "title": "Dashboard",
