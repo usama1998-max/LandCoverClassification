@@ -91,6 +91,7 @@ var rec_img_panel = document.querySelector("#rec-img");
 var dash_nav_btn = document.querySelectorAll(".dash-nav-btn");
 
 
+
 //function get_data(){
 //    $.ajax({
 //        type: "GET",
@@ -130,7 +131,14 @@ for(var i=0;i<dash_nav_btn.length;i++){
 
 
 // IMAGE INPUT
-var img_c_input = document.querySelector("#img-classify-input");
+var img_c_input = document.querySelector("#img-segment-input");
+
+img_c_input.onchange = function () {
+   var path = this.value.split(/\\/g);;
+   var file_name = path[path.length - 1]
+  document.querySelector("#img-segment").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
+};
+
 
 // IMAGE CLASSIFY
 var img_c_file = document.querySelector("#img-classify");

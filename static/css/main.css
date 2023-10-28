@@ -317,6 +317,7 @@
     height:100vh;
     display:block;
     overflow-y:scroll;
+    text-align:center;
 }
 
 #img-classify, #img-segment{
@@ -368,12 +369,61 @@
     width:25%;
 }
 
+
+#img-pred-cont{
+    width:500px;
+    height:300px;
+    display:block;
+    /*position:absolute;
+    left:0;
+    right:0;*/
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:15%;
+    background-position: center;
+    background-size: cover;
+}
+
+#img-pred-cont > h1{
+    text-align:center;
+}
+
 /* IMAGE SEGMENT CSS */
 #img-s{
     width:100%;
     height:100vh;
     display:block;
     overflow-y:scroll;
+    text-align:center;
+}
+
+#empty-seg-img{
+    margin-top:250px;
+    text-align:center;
+    position:absolute;
+    left:0;
+    right:0;
+    display:block;
+}
+
+#empty-seg-img > svg{
+    fill:gray;
+}
+
+#img-seg-1, #img-seg-2{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width:500px;
+    height:300px;
+}
+
+#img-seg-1{
+    margin-top:5%;
+}
+
+#img-seg-2{
+    margin-top:80px;
 }
 
 /* RECENT IMAGE */
@@ -406,6 +456,7 @@
     margin-top:10px;
     margin-bottom:10px;
     transition: all 0.4s;
+    text-align:center;
 }
 
 .user-imgs:hover{
@@ -420,5 +471,11 @@
 #empty-img > svg {
     fill:gray;
 }
+
+
+#img-del-btn, #img-anlys-btn, #img-classify-btn{
+    fill:white;
+}
+
 
 
