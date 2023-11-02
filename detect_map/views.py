@@ -35,28 +35,37 @@ classes = [
 
 
 def segment_image(img_url, username):
+    # load image as greyscale
     img = cv2.imread(img_url, 0)
+
     rimg = cv2.resize(img, (500, 500))
-    _, thresholded1 = cv2.threshold(rimg, 140, 255, cv2.THRESH_BINARY_INV)
-    _, thresholded2 = cv2.threshold(rimg, 150, 255, cv2.THRESH_TRIANGLE)
-    _, labels1 = cv2.connectedComponents(thresholded1)
-    _, labels2 = cv2.connectedComponents(thresholded2)
+
+    _, river_th = cv2.threshold(rimg, 200, 255, cv2.THRESH_BINARY_INV)
+    _, crop_th = cv2.threshold(rimg, 90, 100, cv2.THRESH_BINARY_INV)
+    _, vege_th1 = cv2.threshold(rimg, 80, 90, cv2.THRESH_BINARY_INV)
+
+    # gets the labels and the amount of labels, label 0 is the background
+    _, label_river = cv2.connectedComponents(river_th)
+    _, label_crop = cv2.connectedComponents(crop_th)
+    _, label_vege1 = cv2.connectedComponents(vege_th1)
+
+    # lets draw it for visualization purposes
     preview1 = np.zeros((rimg.shape[0], rimg.shape[1], 3), dtype=np.uint8)
-    preview2 = np.zeros((rimg.shape[0], rimg.shape[1], 3), dtype=np.uint8)
-    preview1[labels1 == 0] = (0, 255, 0)
-    preview2[labels2 == 0] = (0, 0, 255)
+
+    # # draw label 1 blue and label 2 green
+    preview1[label_river == 1] = (0, 0, 255)
+    preview1[label_crop == 0] = (0, 255, 0)
+    preview1[label_vege1 == 2] = (255, 0, 0)
 
     file_path = img_url.split('/')
     filename = file_path[-1].split('.')[0]
     print("Working on segment...")
 
-    land_img = f"/land_{filename}_{username}.png"
-    water_img = f"/water_{filename}_{username}.png"
+    seg_img = f"/{filename}_{username}.png"
 
-    cv2.imwrite("./media/user_imgs_segment"+land_img, preview1)
-    cv2.imwrite("./media/user_imgs_segment"+water_img, preview2)
+    cv2.imwrite("./media/user_imgs_segment"+seg_img, preview1)
 
-    return [land_img, water_img]
+    return "./user_imgs_segment"+seg_img
 
 
 def classify_image(img_url):
@@ -138,9 +147,11 @@ def dashboard(request):
     page_no = request.GET.get('page')
     page = paginator.get_page(page_no)
 
+    # img_seg = None
+    # image_seg_result = None
+
     try:
         img_class = Images.objects.get(id=int(request.session['img_class_id']))
-
         image_classification = request.session['img_pred']
     except Exception:
         img_class = None
@@ -148,10 +159,15 @@ def dashboard(request):
 
     try:
         img_seg = Images.objects.get(id=int(request.session['img_seg_id']))
-        # image_seg_result = ImageSegment.objects.get(img_id=img_seg)
+        image_seg_result = ImageSegment.objects.get(img_id=img_seg)
+    except ObjectDoesNotExist:
+        img_seg = Images.objects.get(id=int(request.session['img_seg_id']))
+        image_seg_result = None
     except Exception:
         img_seg = None
         image_seg_result = None
+
+        print("No image found for segements")
 
     if request.method == 'POST':
         print(request.POST)
@@ -175,11 +191,11 @@ def dashboard(request):
 
                 if "upload_img_class" in request.POST:
                     request.session['img_class_id'] = img.id
+                    request.session.modified = True
 
                 if "upload_img_segment" in request.POST:
                     request.session['img_seg_id'] = img.id
-
-                request.session.modified = True
+                    request.session.modified = True
 
                 messages.success(request, "Image Uploaded successfully")
             else:
@@ -198,7 +214,7 @@ def dashboard(request):
                 user = User.objects.get(username=request.user.username)
 
                 img_class = Images.objects.get(id=request.POST.get('classify'))
-                image_classification = classify_image(project_path + img_class.img.url)
+                image_classification = classify_image("./" + img_class.img.url)
 
                 request.session['dash_panel'] = "0"
                 request.session['img_class_id'] = img_class.id
@@ -218,22 +234,27 @@ def dashboard(request):
                 img_seg = Images.objects.get(id=int(request.POST.get('analyse')))
                 image_path = "./" + img_seg.img.url
 
-                img_s = segment_image(image_path, request.user.username)
-
                 try:
-                    image_seg = ImageSegment.objects.get(img_id=int(request.session['img_seg_id']))
-                    request.session['img_seg_id'] = image_seg.img_id.id
+                    image_seg_result = ImageSegment.objects.get(img_id=int(request.session['img_seg_id']))
+                    print(image_seg_result)
+                    request.session['dash_panel'] = "1"
+                    request.session['img_seg_id'] = image_seg_result.img_id.id
+                    request.session.modified = True
                     messages.success(request, "Re-segmenting selected image")
                 except Exception:
-                    create_image = ImageSegment()
-                    create_image.img_id = img_seg
-                    create_image.land = img_s[0]
-                    create_image.water = img_s[1]
-                    create_image.save()
-                    messages.success(request, "Segmentation created!")
-                    request.session['img_seg_id'] = create_image.img_id.id
+                    image_seg_result = ImageSegment()
+                    image_seg_result.img_id = img_seg
 
-                request.session.modified = True
+                    img_s = segment_image(image_path, request.user.username)
+
+                    image_seg_result.segment = img_s
+                    image_seg_result.save()
+
+
+                    messages.success(request, "Segmentation created!")
+                    request.session['dash_panel'] = "1"
+                    request.session['img_seg_id'] = image_seg_result.img_id.id
+                    request.session.modified = True
 
                 return redirect('dashboard')
 
@@ -276,15 +297,13 @@ def dashboard(request):
             messages.success(request, "Image removed successfully")
             return redirect('dashboard')
 
-        if "analyse" in request.POST:
-            request.session['dash_panel'] = "1"
-
     return render(request, "dashboard.html", {
         "title": "Dashboard",
         "dash_panel": request.session['dash_panel'],
         "imgs": page,
         "page_no": page,
         "selected_image_segment": img_seg,
+        "selected_image_segment_result": image_seg_result,
         "selected_image_classification": img_class,
         "prediction": image_classification
     })

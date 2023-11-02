@@ -11,7 +11,4 @@ class Images(models.Model):
 
 class ImageSegment(models.Model):
     img_id = models.OneToOneField(Images, on_delete=models.CASCADE, primary_key=True)
-    land = models.FileField(upload_to="user_imgs_segment", default="")
-    water = models.FileField(upload_to="user_imgs_segment", default="")
-
-
+    segment = models.FileField(upload_to="user_imgs_segment", default="")
