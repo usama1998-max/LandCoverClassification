@@ -1,5 +1,5 @@
 import os
-
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -15,6 +15,9 @@ import numpy as np
 
 
 trained_model = tf.keras.models.load_model("./modal/landcover_classifier")
+
+
+project_path = settings.BASE_DIR
 
 
 classes = [
@@ -47,11 +50,11 @@ def segment_image(img_url, username):
     filename = file_path[-1].split('.')[0]
     print("Working on segment...")
 
-    land_img = f"land_{filename}_{username}.png"
-    water_img = f"water_{filename}_{username}.png"
+    land_img = f"/land_{filename}_{username}.png"
+    water_img = f"/water_{filename}_{username}.png"
 
-    cv2.imwrite("D:/PycharmProjects/LandCoverClassification/media/user_imgs_segment/"+land_img, preview1)
-    cv2.imwrite("D:/PycharmProjects/LandCoverClassification/media/user_imgs_segment/"+water_img, preview2)
+    cv2.imwrite("./media/user_imgs_segment"+land_img, preview1)
+    cv2.imwrite("./media/user_imgs_segment"+water_img, preview2)
 
     return [land_img, water_img]
 
@@ -130,25 +133,25 @@ def profile(request):
 
 
 def dashboard(request):
-
     imgs = Images.objects.filter(user=request.user)
     paginator = Paginator(imgs, 12)
     page_no = request.GET.get('page')
     page = paginator.get_page(page_no)
 
-
     try:
-        img_class = Images.objects.get(user=request.user, img=request.session['img_class'])
+        img_class = Images.objects.get(id=int(request.session['img_class_id']))
+
         image_classification = request.session['img_pred']
     except Exception:
         img_class = None
         image_classification = None
 
     try:
-        img = Images.objects.get(id=request.session['img_id'])
-        image_seg = ImageSegment.objects.get(img_id=img)
+        img_seg = Images.objects.get(id=int(request.session['img_seg_id']))
+        # image_seg_result = ImageSegment.objects.get(img_id=img_seg)
     except Exception:
-        image_seg = None
+        img_seg = None
+        image_seg_result = None
 
     if request.method == 'POST':
         print(request.POST)
@@ -159,6 +162,7 @@ def dashboard(request):
             return JsonResponse({"dash_panel": request.session['dash_panel']})
 
         if 'upload_img' in request.POST:
+
             if len(request.FILES) > 0:
 
                 user = User.objects.get(username=request.user.username)
@@ -168,43 +172,103 @@ def dashboard(request):
                 img.user = user
                 img.save()
                 print("Image Uploaded")
-                messages.success(request, "Image Uploaded successfully, Check recent image tab.")
+
+                if "upload_img_class" in request.POST:
+                    request.session['img_class_id'] = img.id
+
+                if "upload_img_segment" in request.POST:
+                    request.session['img_seg_id'] = img.id
+
+                request.session.modified = True
+
+                messages.success(request, "Image Uploaded successfully")
             else:
                 messages.error(request, "You need to upload image first")
 
             return redirect('dashboard')
 
         if 'classify' in request.POST:
-            request.session['dash_panel'] = "1"
 
-            img_class = Images.objects.get(id=request.POST.get('classify'))
+            if "re_upload_class" in request.POST:
+                request.session['img_class_id'] = None
+                request.session['img_pred'] = None
+                request.session.modified = True
+                return redirect('dashboard')
+            else:
+                user = User.objects.get(username=request.user.username)
 
-            image_classification = classify_image("D:/PycharmProjects/LandCoverClassification/" + img_class.img.url)
+                img_class = Images.objects.get(id=request.POST.get('classify'))
+                image_classification = classify_image(project_path + img_class.img.url)
 
-            request.session['img_class'] = img_class.img.name
-            request.session['img_pred'] = image_classification
-            request.session.modified = True
-            messages.success(request, f"We found your image belongs to {image_classification} class")
+                request.session['dash_panel'] = "0"
+                request.session['img_class_id'] = img_class.id
+                request.session['img_pred'] = image_classification
 
-            return redirect('dashboard')
+                request.session.modified = True
+
+                return redirect('dashboard')
 
         if 'image_segment' in request.POST:
+            if "re_upload_segment" in request.POST:
+                request.session['img_seg_id'] = None
+                request.session.modified = True
+                return redirect('dashboard')
+            else:
 
+                img_seg = Images.objects.get(id=int(request.POST.get('analyse')))
+                image_path = "./" + img_seg.img.url
+
+                img_s = segment_image(image_path, request.user.username)
+
+                try:
+                    image_seg = ImageSegment.objects.get(img_id=int(request.session['img_seg_id']))
+                    request.session['img_seg_id'] = image_seg.img_id.id
+                    messages.success(request, "Re-segmenting selected image")
+                except Exception:
+                    create_image = ImageSegment()
+                    create_image.img_id = img_seg
+                    create_image.land = img_s[0]
+                    create_image.water = img_s[1]
+                    create_image.save()
+                    messages.success(request, "Segmentation created!")
+                    request.session['img_seg_id'] = create_image.img_id.id
+
+                request.session.modified = True
+
+                return redirect('dashboard')
+
+        if "re_upload_class" in request.POST:
+            request.session['img_class_id'] = None
+            request.session['img_pred'] = None
+            request.session.modified = True
+            return redirect('dashboard')
+
+        if "re_upload_segment" in request.POST:
+            request.session['img_seg_id'] = None
+
+            request.session.modified = True
             return redirect('dashboard')
 
         if 'del' in request.POST:
-            image = Images.objects.get(id=request.POST.get('del'))
-            image_segm = ImageSegment.objects.get(img_id=image)
 
-            os.remove("D:/PycharmProjects/LandCoverClassification/media/user_imgs_segment/" + image_segm.land.name)
+            image = Images.objects.get(id=int(request.POST.get('del')))
 
-            os.remove("D:/PycharmProjects/LandCoverClassification/media/user_imgs_segment/" + image_segm.water.name)
-            image_segm.delete()
+            try:
+                image_segm = ImageSegment.objects.get(img_id=image)
 
-            os.remove("D:/PycharmProjects/LandCoverClassification" + image.img.url)
+                os.remove("./media/user_imgs_segment/" + image_segm.land.name)
+
+                os.remove("./media/user_imgs_segment/" + image_segm.water.name)
+                image_segm.delete()
+            except Exception:
+                print("No image segments were found!")
+
+            os.remove("./"+image.img.url)
             image.delete()
 
             request.session['img_class'] = None
+            request.session['img_seg_id'] = None
+            request.session['img_class_id'] = None
             request.session['img_pred'] = None
             request.session['img_id'] = None
             request.session.modified = True
@@ -213,45 +277,14 @@ def dashboard(request):
             return redirect('dashboard')
 
         if "analyse" in request.POST:
-            request.session['dash_panel'] = "2"
-
-            image = Images.objects.get(id=request.POST.get('analyse'))
-            image_path = "D:/PycharmProjects/LandCoverClassification"+image.img.url
-
-            img_s = segment_image(image_path, request.user.username)
-
-            try:
-                image_seg = ImageSegment.objects.get(img_id=int(request.session['img_seg_id']))
-                request.session['img_id'] = image_seg.img_id.id
-                request.session.modified = True
-                messages.success(request, "Image exist")
-            except Exception:
-                image_seg = ImageSegment()
-                image_seg.img_id = image
-                image_seg.land = img_s[0]
-                image_seg.water = img_s[1]
-                image_seg.save()
-                messages.success(request, "Segmentation created!")
-
-                request.session['img_id'] = image_seg.img_id.id
-                request.session.modified = True
-
-            return redirect('dashboard')
+            request.session['dash_panel'] = "1"
 
     return render(request, "dashboard.html", {
         "title": "Dashboard",
         "dash_panel": request.session['dash_panel'],
         "imgs": page,
         "page_no": page,
-        "image_segments": image_seg,
+        "selected_image_segment": img_seg,
         "selected_image_classification": img_class,
         "prediction": image_classification
     })
-
-
-def image_classify(request):
-    ...
-
-
-def image_segment(request):
-    ...
