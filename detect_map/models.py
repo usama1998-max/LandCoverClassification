@@ -12,3 +12,11 @@ class Images(models.Model):
 class ImageSegment(models.Model):
     img_id = models.OneToOneField(Images, on_delete=models.CASCADE, primary_key=True)
     segment = models.FileField(upload_to="user_imgs_segment", default="")
+
+
+class ImageSimilarity(models.Model):
+    img1 = models.OneToOneField(Images, on_delete=models.CASCADE, primary_key=True)
+    img2 = models.FileField(upload_to="user_imgs_similarity", default="")
+    img_result = models.FileField(upload_to="user_imgs_similarity", default="", null=True, blank=True)
+    img_similarity_score = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
+

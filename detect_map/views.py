@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Images, ImageSegment
+from .models import Images, ImageSegment, ImageSimilarity
 from django.contrib.auth import login, logout, authenticate
 from .forms import CreateUserForm
 from django.contrib import messages
@@ -12,6 +12,7 @@ import tensorflow as tf
 import cv2
 from django.core.paginator import Paginator
 import numpy as np
+from skimage.metrics import structural_similarity as ssim
 
 
 trained_model = tf.keras.models.load_model("./modal/landcover_classifier")
@@ -32,6 +33,61 @@ classes = [
     'River',
     'SeaLake'
 ]
+
+
+def image_similarity(img1, img2, username):
+    # Load two images from different time periods
+    image1 = cv2.imread(img1)
+    image2 = cv2.imread(img2)
+
+    sift = cv2.SIFT.create()
+
+    keypoints1, descriptors1 = sift.detectAndCompute(image1, None)
+    keypoints2, descriptors2 = sift.detectAndCompute(image2, None)
+
+    # Match keypoints between the two images
+    bf = cv2.BFMatcher()
+    matches = bf.knnMatch(descriptors1, descriptors2, k=2)
+
+    # Apply ratio test to filter good matches
+    good_matches = []
+    for m, n in matches:
+        if m.distance < 0.80 * n.distance:
+            good_matches.append(m)
+
+    # Calculate the homography matrix to align the images
+    if len(good_matches) > 4:
+        src_pts = np.float32([keypoints1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
+        dst_pts = np.float32([keypoints2[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
+        M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+        result = cv2.warpPerspective(image1, M, (image2.shape[1], image2.shape[0]))
+
+    # Perform change detection by subtracting the aligned images
+    change_map = cv2.absdiff(result, image2)
+
+    # Threshold and identify changes
+    threshold = 30
+    change_mask = cv2.threshold(change_map, threshold, 255, cv2.THRESH_BINARY)[1]
+
+    # You can further process the change_mask to identify specific changes or areas of interest
+    rimage1 = cv2.resize(change_mask, (500, 300))
+
+    gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+    gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+
+    rgi1 = cv2.resize(gray_image1, (500, 300))
+    rgi2 = cv2.resize(gray_image2, (500, 300))
+
+    # Calculate SSIM score
+    ssim_score = ssim(rgi1, rgi2)
+
+    file_path = img1.split('/')
+    filename = file_path[-1].split('.')[0]
+    img_path = f"/{filename}_{username}.png"
+
+    cv2.imwrite("./media/user_imgs_similarity"+img_path, rimage1)
+
+    return ["./user_imgs_similarity"+img_path, round(ssim_score, 2)]
 
 
 def segment_image(img_url, username):
@@ -65,7 +121,7 @@ def segment_image(img_url, username):
 
     cv2.imwrite("./media/user_imgs_segment"+seg_img, preview1)
 
-    return "./user_imgs_segment"+seg_img
+    return "/user_imgs_segment"+seg_img
 
 
 def classify_image(img_url):
@@ -147,9 +203,6 @@ def dashboard(request):
     page_no = request.GET.get('page')
     page = paginator.get_page(page_no)
 
-    # img_seg = None
-    # image_seg_result = None
-
     try:
         img_class = Images.objects.get(id=int(request.session['img_class_id']))
         image_classification = request.session['img_pred']
@@ -158,16 +211,32 @@ def dashboard(request):
         image_classification = None
 
     try:
+        print(request.session["img_seg_id"])
         img_seg = Images.objects.get(id=int(request.session['img_seg_id']))
-        image_seg_result = ImageSegment.objects.get(img_id=img_seg)
     except ObjectDoesNotExist:
-        img_seg = Images.objects.get(id=int(request.session['img_seg_id']))
-        image_seg_result = None
+        img_seg = None
     except Exception:
         img_seg = None
-        image_seg_result = None
 
+    try:
+        image_seg_result = ImageSegment.objects.get(img_id=img_seg)
+    except ObjectDoesNotExist:
+        image_seg_result = None
         print("No image found for segements")
+
+    try:
+        similar_image = Images.objects.get(id=int(request.session['img_sim']))
+    except ObjectDoesNotExist:
+        similar_image = None
+    except Exception:
+        similar_image = None
+
+    try:
+        similar_image_result = ImageSimilarity.objects.get(img1=similar_image)
+    except ObjectDoesNotExist:
+        similar_image_result = None
+    except Exception:
+        similar_image_result = None
 
     if request.method == 'POST':
         print(request.POST)
@@ -250,10 +319,9 @@ def dashboard(request):
                     image_seg_result.segment = img_s
                     image_seg_result.save()
 
-
                     messages.success(request, "Segmentation created!")
                     request.session['dash_panel'] = "1"
-                    request.session['img_seg_id'] = image_seg_result.img_id.id
+                    request.session['img_seg_id'] = img_seg.id
                     request.session.modified = True
 
                 return redirect('dashboard')
@@ -277,12 +345,23 @@ def dashboard(request):
             try:
                 image_segm = ImageSegment.objects.get(img_id=image)
 
-                os.remove("./media/user_imgs_segment/" + image_segm.land.name)
-
-                os.remove("./media/user_imgs_segment/" + image_segm.water.name)
+                os.remove("./media/user_imgs_segment/" + image_segm.segment.name)
                 image_segm.delete()
             except Exception:
                 print("No image segments were found!")
+
+            try:
+                image_sim = ImageSimilarity.objects.get(img1=image)
+                os.remove("."+image_sim.img2.url)
+
+                try:
+                    os.remove("."+image_sim.img_result.url)
+                except Exception:
+                    print("No Image Result file!")
+
+                image_sim.delete()
+            except ObjectDoesNotExist:
+                print("No similarity row found")
 
             os.remove("./"+image.img.url)
             image.delete()
@@ -297,6 +376,53 @@ def dashboard(request):
             messages.success(request, "Image removed successfully")
             return redirect('dashboard')
 
+        if 'upload_img_sim' in request.POST:
+            print("Image similarity")
+            if 0 < len(request.FILES) < 3:
+                if "img1" in request.FILES and "img2" in request.FILES:
+                    user = User.objects.get(username=request.user.username)
+
+                    img1 = Images()
+                    img2 = ImageSimilarity()
+
+                    img1.user = user
+                    img1.img = request.FILES['img1']
+
+                    img2.img1 = img1
+
+                    img2.img2 = request.FILES['img2']
+
+                    img1.save()
+                    img2.save()
+
+                    image_path1 = "./" + img1.img.url
+                    image_path2 = "./" + img2.img2.url
+
+                    similarity_result = image_similarity(image_path1, image_path2, img1.user.username)
+
+                    img2.img_result = similarity_result[0]
+                    img2.img_similarity_score = similarity_result[1]
+                    img2.save()
+
+                    print(similarity_result)
+
+                    request.session['img_sim'] = img1.id
+                    request.session.modified = True
+
+                    messages.success(request, "Image Uploaded successfully")
+                else:
+                    messages.error(request, "Make sure both images are uploaded")
+
+            else:
+                messages.error(request, "You need to upload image first")
+
+            return redirect('dashboard')
+
+        if 're_upload_similarity' in request.POST:
+            request.session['img_sim'] = None
+            request.session.modified = True
+            return redirect('dashboard')
+
     return render(request, "dashboard.html", {
         "title": "Dashboard",
         "dash_panel": request.session['dash_panel'],
@@ -305,5 +431,7 @@ def dashboard(request):
         "selected_image_segment": img_seg,
         "selected_image_segment_result": image_seg_result,
         "selected_image_classification": img_class,
-        "prediction": image_classification
+        "prediction": image_classification,
+        "selected_similar_image": similar_image,
+        "selected_similar_image_result": similar_image_result
     })

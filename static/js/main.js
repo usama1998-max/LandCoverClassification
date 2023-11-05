@@ -133,10 +133,33 @@ for(var i=0;i<dash_nav_btn.length;i++){
 // IMAGE INPUT
 var img_c_input = document.querySelector("#img-segment-input");
 
-img_c_input.onchange = function () {
+if(img_c_input != undefined || img_c_input != null){
+    img_c_input.onchange = function () {
+       var path = this.value.split(/\\/g);;
+       var file_name = path[path.length - 1]
+       document.querySelector("#img-segment").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
+    };
+}
+
+
+
+// IMAGE SIMILARITY
+var img_sim_input1 = document.querySelector("#img-sim-input1");
+
+img_sim_input1.onchange = function () {
    var path = this.value.split(/\\/g);;
    var file_name = path[path.length - 1]
-  document.querySelector("#img-segment").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
+   console.log("File 1: " + file_name)
+   document.querySelector("#img-sim1").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
+};
+
+var img_sim_input2 = document.querySelector("#img-sim-input2");
+
+img_sim_input2.onchange = function () {
+   var path = this.value.split(/\\/g);;
+   var file_name = path[path.length - 1]
+   console.log("File 2: " + file_name)
+   document.querySelector("#img-sim2").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
 };
 
 
@@ -180,7 +203,7 @@ var img_c_file = document.querySelector("#img-classify");
 
 var img_s_input = document.querySelector("#image-segment-input");
 
-if(img_s_file !== null){
+if(img_s_input != undefined || img_s_input !== null){
     img_c_file.addEventListener("dragenter", function(e){
         e.preventDefault();
         console.log('DRAG OVER EVENT');
