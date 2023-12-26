@@ -200,10 +200,16 @@ def profile(request):
 
 
 def dashboard(request):
-    imgs = Images.objects.filter(user=request.user)
-    paginator = Paginator(imgs, 12)
-    page_no = request.GET.get('page')
-    page = paginator.get_page(page_no)
+    imgs = None
+    page = None
+
+    try:
+        imgs = Images.objects.filter(user=request.user)
+        paginator = Paginator(imgs, 12)
+        page_no = request.GET.get('page')
+        page = paginator.get_page(page_no)
+    except Exception as e:
+        print(e)
 
     try:
         img_class = Images.objects.get(id=int(request.session['img_class_id']))
@@ -462,7 +468,7 @@ def scrap_image(request):
                     if "https" in img.get('src') or "https" in img.get('src'):
                         result.append(img.get('src'))
             else:
-                messages.warning(request, "Didn't find any images on this site!")
+                messages.error(request, "Didn't find any images on this site!")
                 return redirect("scrap")
 
             # return render(request, "scrap.html", {"title": "Scrap Image", "links": result})
