@@ -146,22 +146,27 @@ if(img_c_input != undefined || img_c_input != null){
 // IMAGE SIMILARITY
 var img_sim_input1 = document.querySelector("#img-sim-input1");
 
-img_sim_input1.onchange = function () {
-   var path = this.value.split(/\\/g);;
-   var file_name = path[path.length - 1]
-   console.log("File 1: " + file_name)
-   document.querySelector("#img-sim1").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
-};
+if(img_sim_input1 != undefined || img_sim_input1 != null){
+    img_sim_input1.onchange = function () {
+       var path = this.value.split(/\\/g);;
+       var file_name = path[path.length - 1]
+       console.log("File 1: " + file_name)
+       document.querySelector("#img-sim1").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
+    };
+}
+
+
 
 var img_sim_input2 = document.querySelector("#img-sim-input2");
 
-img_sim_input2.onchange = function () {
-   var path = this.value.split(/\\/g);;
-   var file_name = path[path.length - 1]
-   console.log("File 2: " + file_name)
-   document.querySelector("#img-sim2").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
-};
-
+if(img_sim_input2 != undefined || img_sim_input2 != null){
+    img_sim_input2.onchange = function () {
+       var path = this.value.split(/\\/g);;
+       var file_name = path[path.length - 1]
+       console.log("File 2: " + file_name)
+       document.querySelector("#img-sim2").innerHTML = "<h1 style='text-align:center; margin-top:15%;' >"+file_name+"</h1>";
+    };
+}
 
 // IMAGE CLASSIFY
 var img_c_file = document.querySelector("#img-classify");

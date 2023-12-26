@@ -107,9 +107,14 @@
 
 #des1{
     width:500px;
-    height:500px;
+    height:510px;
     margin-top:5%;
     overflow:hidden;
+}
+
+#des1:hover{
+    border:1px solid white;
+    border-radius:10px;
 }
 
 #des1 > div{
@@ -131,11 +136,15 @@
 
 #des2{
     width:500px;
-    height:500px;
+    height:510px;
     margin-top:5%;
     overflow:hidden;
 }
 
+#des2:hover{
+    border:1px solid white;
+    border-radius:10px;
+}
 
 #des2 > div{
     background-image:url('./img/land-seg.jpg');

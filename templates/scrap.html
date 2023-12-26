@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'alert.html' %}
+<div class="container-fluid" >
+
+</div>
+<h1 class="container text-center"> Scrap Images</h1>
+
+<form method="post" class="container">
+    {% csrf_token %}
+    <input type="text" class="form-control mt-4" name="site-name" placeholder="Copy and paste URL..." style="">
+    <input type="submit" class="btn btn-primary mt-2" value="scrap images" style="display:block; margin-right:auto; margin-left:auto;">
+</form>
+
+{% if links %}
+<div class="mt-4" style="width:100%;
+    display:flex;
+    flex-flow: wrap;
+    justify-content:center;
+    ">
+{% for link in links %}
+    <div class="mt-4 mr-4 mb-4 d-block rounded" style="width:200px;
+    height:200px;
+    background-image:url('{{ link }}');
+    background-position: center;
+    background-size: cover;">
+        <button class="btn btn-primary d-block mt-1 bttn-link" id="{{ link }}" value="{{ link }}" style="margin-left:5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
+                <path fill="#ffffff" d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
+            </svg>
+        </button>
+    </div>
+{% endfor %}
+</div>
+
+<script>
+    async function downloadImage(imageSrc, nameOfDownload = 'scrapped-image.png') {
+      const response = await fetch(imageSrc);
+
+      const blobImage = await response.blob();
+
+      const href = URL.createObjectURL(blobImage);
+
+      const anchorElement = document.createElement('a');
+      anchorElement.href = href;
+      anchorElement.download = nameOfDownload;
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+    }
+
+    var btn = document.querySelectorAll('.bttn-link');
+
+
+    for(var i=0;i<btn.length;i++){
+        btn[i].addEventListener('click', (e) => {
+          downloadImage(
+            `${e.target.value}`
+          )
+            .then(() => {
+              console.log('The image has been downloaded');
+            })
+            .catch(err => {
+              console.log('Error downloading image: ', err);
+            });
+        });
+    }
+
+
+</script>
+
+
+{% endif %}
+
+
+
+
+
+
+{% endblock %}

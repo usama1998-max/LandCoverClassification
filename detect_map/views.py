@@ -13,6 +13,8 @@ import cv2
 from django.core.paginator import Paginator
 import numpy as np
 from skimage.metrics import structural_similarity as ssim
+from requests import get
+from bs4 import BeautifulSoup
 
 
 trained_model = tf.keras.models.load_model("./modal/landcover_classifier")
@@ -435,3 +437,42 @@ def dashboard(request):
         "selected_similar_image": similar_image,
         "selected_similar_image_result": similar_image_result
     })
+
+
+def scrap_image(request):
+
+    result = []
+
+    if request.method == "POST":
+        print(request.POST['site-name'])
+
+        if request.POST['site-name'] == "":
+            messages.error(request, "Please provide a url!")
+            return redirect('scrap')
+
+        try:
+            res = get(request.POST['site-name'])
+
+            bs = BeautifulSoup(res.text, 'html.parser')
+
+            imgs = bs.find_all('img')
+
+            if len(imgs) > 0:
+                for img in imgs:
+                    if "https" in img.get('src') or "https" in img.get('src'):
+                        result.append(img.get('src'))
+            else:
+                messages.warning(request, "Didn't find any images on this site!")
+                return redirect("scrap")
+
+            # return render(request, "scrap.html", {"title": "Scrap Image", "links": result})
+
+            # return redirect("scrap")
+
+        except Exception as e:
+            print(e)
+            messages.error(request, "Please provide a valid url!")
+            return redirect("scrap")
+
+    return render(request, "scrap.html", {"title": "Scrap Image", "links": result})
+

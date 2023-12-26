@@ -18,11 +18,13 @@
 </div>
 
 <div class="container-fluid" id="home-div3">
+
     <div class="container" id="des1">
         <h4 class="text-light">Classification</h4>
         <div class="container-fluid"></div>
         <p class="text-light pt-4">Classification is the process of categorizing and labeling different land cover types or classes based on their distinct visual or physical characteristics. It plays a crucial role in understanding and managing our environment by identifying and differentiating areas of forests, urban development, water bodies, agriculture, and more. Through advanced techniques and technologies, land cover classification helps us gain valuable insights into the Earth's surface, enabling better decision-making for conservation, urban planning, agriculture, and environmental monitoring.</p>
     </div>
+
 
     <div class="container" id="des2">
         <h4 class="text-light">Segmentation</h4>
@@ -31,8 +33,38 @@
     </div>
 </div>
 
-<div class="container-fluid" id="home-div4">
+<div class="container-fluid bg-dark" id="home-div4">
+<div class="container-fluid">
+    <p class="text-justify p-3 text-light rounded" style="text-wrap:wrap; border:1px solid white; width:500px; display:block; position:absolute; right:200px; margin-top:50px;">
+        A Land Cover Classification and Segmentation Project involves the use of advanced remote sensing and image processing techniques to analyze satellite or aerial imagery and categorize the Earth's surface into different land cover classes.
+        The primary objectives of such a project include mapping and identifying various land cover types, such as forests, urban areas, water bodies, agricultural fields, and more.
+        The classification aspect of the project focuses on assigning predefined labels to each pixel or group of pixels in the satellite images, based on spectral, textural, and contextual information.
+        This process allows for the creation of detailed and accurate land cover maps, which can be invaluable for environmental monitoring, urban planning, natural resource management, and climate change studies.
+        On the other hand, segmentation involves partitioning the image into meaningful and homogeneous regions, typically sharing similar spectral and spatial characteristics.
+        This step is crucial for a more granular understanding of the landscape and can aid in detecting subtle variations within a specific land cover class.</p>
+
+    <img src="{% static 'css/img/3d-map.png' %}" width="600px" height="500px" style="display:block;
+position:absolute; margin-right:auto; margin-left:auto; margin-top:50px;">
 
 </div>
+</div>
+
+
+<script>
+    var des1 = document.getElementById('des1');
+    var des2 = document.getElementById('des2');
+
+    des1.addEventListener('click', function(){
+        window.location = "http://127.0.0.1:8000/dashboard";
+    });
+
+    des2.addEventListener('click', function(){
+        window.location = "http://127.0.0.1:8000/dashboard";
+    });
+
+
+</script>
+
+
 
 {% endblock %}
