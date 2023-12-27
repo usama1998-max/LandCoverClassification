@@ -202,6 +202,7 @@ def profile(request):
 def dashboard(request):
     imgs = None
     page = None
+    image_classification = None
 
     try:
         imgs = Images.objects.filter(user=request.user)
@@ -213,8 +214,12 @@ def dashboard(request):
 
     try:
         img_class = Images.objects.get(id=int(request.session['img_class_id']))
-        image_classification = request.session['img_pred']
-    except Exception:
+
+        if 'img_pred' in request.session:
+            image_classification = request.session['img_pred']
+
+    except Exception as e:
+        print(f"Image Classification Error: {e}")
         img_class = None
         image_classification = None
 
@@ -222,8 +227,10 @@ def dashboard(request):
         print(request.session["img_seg_id"])
         img_seg = Images.objects.get(id=int(request.session['img_seg_id']))
     except ObjectDoesNotExist:
+        print("Object does not Exist!")
         img_seg = None
-    except Exception:
+    except Exception as e:
+        print(e)
         img_seg = None
 
     try:
@@ -235,15 +242,19 @@ def dashboard(request):
     try:
         similar_image = Images.objects.get(id=int(request.session['img_sim']))
     except ObjectDoesNotExist:
+        print("Object does not Exist!")
         similar_image = None
-    except Exception:
+    except Exception as e:
+        print(e)
         similar_image = None
 
     try:
         similar_image_result = ImageSimilarity.objects.get(img1=similar_image)
     except ObjectDoesNotExist:
+        print("Object does not Exist!")
         similar_image_result = None
-    except Exception:
+    except Exception as e:
+        print(e)
         similar_image_result = None
 
     if request.method == 'POST':
@@ -267,18 +278,18 @@ def dashboard(request):
                 print("Image Uploaded")
 
                 if "upload_img_class" in request.POST:
-                    request.session['img_class_id'] = img.id
+                    request.session['img_class_id'] = img.pk
                     request.session.modified = True
 
                 if "upload_img_segment" in request.POST:
-                    request.session['img_seg_id'] = img.id
+                    request.session['img_seg_id'] = img.pk
                     request.session.modified = True
 
                 messages.success(request, "Image Uploaded successfully")
+                return redirect('dashboard')
             else:
                 messages.error(request, "You need to upload image first")
-
-            return redirect('dashboard')
+                return redirect('dashboard')
 
         if 'classify' in request.POST:
 
