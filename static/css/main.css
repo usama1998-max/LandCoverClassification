@@ -330,7 +330,7 @@
 }
 
 #img-classify, #img-segment{
-    border: 2px solid black;
+    border: 2px solid #6c757d;
     border-radius: 10px;
     position: relative;
     display: block;
@@ -410,6 +410,7 @@
     margin-left:auto;
     margin-right:auto;
     margin-top:5%;
+    margin-bottom:20px;
     border:1px solid black;
     background-position: center;
     background-size: cover;
@@ -480,7 +481,7 @@
     background-position: center;
     background-size: 250px 200px;
     background-repeat:no-repeat;
-    border:2px solid black;
+    border:2px solid #6c757d;
     border-radius:10px;
     margin-left:15px;
     margin-top:10px;
@@ -510,7 +511,7 @@
 
 /* IMAGE SIMILARITY */
 #img-sim1, #img-sim2{
-    border: 2px solid black;
+    border: 2px solid #6c757d;
     border-radius: 10px;
     position: relative;
     display: block;
@@ -580,5 +581,38 @@
 
 #img-sim-cont3 > h3{
     text-align:center;
+}
+
+
+
+/* IMAGE FEATURE EXTRACTION */
+#img-feat-cont{
+    width:500px;
+    height:300px;
+    display:block;
+    /*position:absolute;
+    left:0;
+    right:0;*/
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:10%;
+    background-position: center;
+    background-size: cover;
+}
+
+
+#img-extract-btn{
+  position:absolute;
+  display:block;
+  left:35%;
+}
+
+
+#re-upload-3{
+  position:absolute;
+  display:block;
+  margin-top:50px;
+  margin-left:auto;
+  margin-right:auto;
 }
 

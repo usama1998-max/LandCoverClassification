@@ -8,8 +8,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detect_map/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/detect_map/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_imgs_segment/162964_sat_usama.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_imgs_segment/img2_usama.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/image-classify.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/image-classify.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/image-segment.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/image-segment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/image_similarity.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/image_similarity.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,17 +48,17 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/PycharmProjects/LandCoverClassification&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/PycharmProjects/LandCoverClassification/static/js&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PycharmProjects\LandCoverClassification\static\js" />
       <recent name="D:\PycharmProjects\LandCoverClassification" />
       <recent name="D:\PycharmProjects\LandCoverClassification\static\css\img" />
       <recent name="D:\PycharmProjects\LandCoverClassification\static\img" />
       <recent name="C:\Users\ROOT\PycharmProjects\landcover" />
-      <recent name="C:\Users\ROOT\PycharmProjects\landcover\modal" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\PycharmProjects\LandCoverClassification\media" />

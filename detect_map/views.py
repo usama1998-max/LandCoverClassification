@@ -203,6 +203,8 @@ def dashboard(request):
     imgs = None
     page = None
     image_classification = None
+    image_feature = None
+    one_dim_array = None
 
     try:
         imgs = Images.objects.filter(user=request.user)
@@ -257,6 +259,16 @@ def dashboard(request):
         print(e)
         similar_image_result = None
 
+    try:
+        print(request.session["image_feature"])
+        image_feature = Images.objects.get(id=int(request.session['image_feature']))
+    except ObjectDoesNotExist:
+        print("Object does not Exist!")
+        image_feature = None
+    except Exception as e:
+        print(e)
+        image_feature = None
+
     if request.method == 'POST':
         print(request.POST)
 
@@ -283,6 +295,10 @@ def dashboard(request):
 
                 if "upload_img_segment" in request.POST:
                     request.session['img_seg_id'] = img.pk
+                    request.session.modified = True
+
+                if "image_feature" in request.POST:
+                    request.session['image_feature'] = img.pk
                     request.session.modified = True
 
                 messages.success(request, "Image Uploaded successfully")
@@ -390,6 +406,7 @@ def dashboard(request):
             request.session['img_class_id'] = None
             request.session['img_pred'] = None
             request.session['img_id'] = None
+            request.session['image_feature'] = None
             request.session.modified = True
 
             messages.success(request, "Image removed successfully")
@@ -425,7 +442,7 @@ def dashboard(request):
 
                     print(similarity_result)
 
-                    request.session['img_sim'] = img1.id
+                    request.session['img_sim'] = img1.pk
                     request.session.modified = True
 
                     messages.success(request, "Image Uploaded successfully")
@@ -442,6 +459,20 @@ def dashboard(request):
             request.session.modified = True
             return redirect('dashboard')
 
+        if 're_upload_feature' in request.POST:
+            request.session['image_feature'] = None
+            request.session.modified = True
+            return redirect('dashboard')
+
+        if 'extract_feature' in request.POST:
+            img = Images.objects.get(pk=int(request.POST.get('extract_feature')))
+            extracted_image = cv2.imread("./" + img.img.url, cv2.IMREAD_GRAYSCALE)
+            # hist, bins = np.histogram(extracted_image.flatten(), bins=256, range=[0, 256])
+
+            hist = cv2.calcHist([extracted_image], [0], None, [256], [0, 10])
+            # norm = [element for row in hist for element in row]
+            one_dim_array = [element for row in hist for element in row]
+
     return render(request, "dashboard.html", {
         "title": "Dashboard",
         "dash_panel": request.session['dash_panel'],
@@ -452,7 +483,9 @@ def dashboard(request):
         "selected_image_classification": img_class,
         "prediction": image_classification,
         "selected_similar_image": similar_image,
-        "selected_similar_image_result": similar_image_result
+        "selected_similar_image_result": similar_image_result,
+        "hist": one_dim_array,
+        "image_feature": image_feature
     })
 
 
