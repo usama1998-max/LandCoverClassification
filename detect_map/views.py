@@ -456,6 +456,7 @@ def dashboard(request):
                 imageRgb = ImageRGB.objects.get(img_id=image)
                 print("URL of FILE: ./media" + imageRgb.rgb.name)
                 os.remove("./media" + imageRgb.rgb.name)
+                os.remove("./media" + imageRgb.canny.name)
                 imageRgb.delete()
             except Exception:
                 print("No RGB images were found!")
