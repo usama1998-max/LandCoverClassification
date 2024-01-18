@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Images, ImageSegment, ImageSimilarity
+from .models import Images, ImageSegment, ImageSimilarity, ImageRGB
 from django.contrib.auth import login, logout, authenticate
 from .forms import CreateUserForm
 from django.contrib import messages
@@ -135,6 +135,54 @@ def classify_image(img_url):
     return classes[int(label)]
 
 
+def rgb_image(img_url, username):
+    file_path = img_url.split('/')
+    filename = file_path[-1].split('.')[0]
+    print("Working on rgb channels...")
+
+    rgb = f"/{filename}_{username}.png"
+
+    img = cv2.imread(img_url)
+
+    rimg = cv2.resize(img, (250, 250), interpolation=cv2.INTER_AREA)
+
+    blueChannel = rimg[:, :, 0]
+    greenChannel = rimg[:, :, 1]
+    redChannel = rimg[:, :, 2]
+
+    c1_rgb = cv2.cvtColor(blueChannel, cv2.COLOR_GRAY2BGR)
+    c2_rgb = cv2.cvtColor(greenChannel, cv2.COLOR_GRAY2BGR)
+    c3_rgb = cv2.cvtColor(redChannel, cv2.COLOR_GRAY2BGR)
+
+    stack1 = np.hstack([rimg, c1_rgb])
+    stack2 = np.hstack([c2_rgb, c3_rgb])
+    stack3 = np.vstack([stack1, stack2])
+
+    cv2.imwrite("./media/rgb_imgs" + rgb, stack3)
+
+    return "/rgb_imgs" + rgb
+
+
+def canny_image(img_url, username):
+    file_path = img_url.split('/')
+    filename = file_path[-1].split('.')[0]
+    print("Working on rgb channels...")
+
+    canny = f"/canny_{filename}_{username}.png"
+
+    img = cv2.imread(img_url)
+
+    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    rimg = cv2.resize(gray_image, (500, 500), interpolation=cv2.INTER_AREA)
+
+    edged = cv2.Canny(rimg, 30, 200)
+
+    cv2.imwrite("./media/rgb_imgs" + canny, edged)
+
+    return "/rgb_imgs" + canny
+
+
 def check_user_email(email: str) -> bool:
     try:
         User.objects.get(email=email)
@@ -205,6 +253,8 @@ def dashboard(request):
     image_classification = None
     image_feature = None
     one_dim_array = None
+    image_bgr = None
+    image_shape = [None] * 3
 
     try:
         imgs = Images.objects.filter(user=request.user)
@@ -262,12 +312,24 @@ def dashboard(request):
     try:
         print(request.session["image_feature"])
         image_feature = Images.objects.get(id=int(request.session['image_feature']))
+        image_shape = cv2.imread("./"+image_feature.img.url).shape
     except ObjectDoesNotExist:
         print("Object does not Exist!")
         image_feature = None
     except Exception as e:
         print(e)
         image_feature = None
+
+    try:
+        print(request.session["image_rgb"])
+        image_bgr = ImageRGB.objects.get(img_id=int(request.session['image_rgb']))
+        print(image_bgr)
+    except ObjectDoesNotExist:
+        print("Object does not Exist!")
+        image_bgr = None
+    except Exception as e:
+        print(e)
+        image_bgr = None
 
     if request.method == 'POST':
         print(request.POST)
@@ -369,7 +431,12 @@ def dashboard(request):
 
         if "re_upload_segment" in request.POST:
             request.session['img_seg_id'] = None
+            request.session.modified = True
+            return redirect('dashboard')
 
+        if "re_upload_feature" in request.POST:
+            request.session['image_feature'] = None
+            request.session['image_rgb'] = None
             request.session.modified = True
             return redirect('dashboard')
 
@@ -384,6 +451,14 @@ def dashboard(request):
                 image_segm.delete()
             except Exception:
                 print("No image segments were found!")
+
+            try:
+                imageRgb = ImageRGB.objects.get(img_id=image)
+                print("URL of FILE: ./media" + imageRgb.rgb.name)
+                os.remove("./media" + imageRgb.rgb.name)
+                imageRgb.delete()
+            except Exception:
+                print("No RGB images were found!")
 
             try:
                 image_sim = ImageSimilarity.objects.get(img1=image)
@@ -407,6 +482,7 @@ def dashboard(request):
             request.session['img_pred'] = None
             request.session['img_id'] = None
             request.session['image_feature'] = None
+            request.session['image_rgb'] = None
             request.session.modified = True
 
             messages.success(request, "Image removed successfully")
@@ -466,12 +542,18 @@ def dashboard(request):
 
         if 'extract_feature' in request.POST:
             img = Images.objects.get(pk=int(request.POST.get('extract_feature')))
-            extracted_image = cv2.imread("./" + img.img.url, cv2.IMREAD_GRAYSCALE)
-            # hist, bins = np.histogram(extracted_image.flatten(), bins=256, range=[0, 256])
 
-            hist = cv2.calcHist([extracted_image], [0], None, [256], [0, 10])
-            # norm = [element for row in hist for element in row]
-            one_dim_array = [element for row in hist for element in row]
+            image = ImageRGB()
+            image.img_id = img
+            image.rgb = rgb_image("./" + img.img.url, request.user)
+            image.canny = canny_image("./" + img.img.url, request.user)
+            image.save()
+
+            image_bgr = image
+
+            request.session['image_rgb'] = img.pk
+            request.session.modified = True
+            return redirect('dashboard')
 
     return render(request, "dashboard.html", {
         "title": "Dashboard",
@@ -485,7 +567,11 @@ def dashboard(request):
         "selected_similar_image": similar_image,
         "selected_similar_image_result": similar_image_result,
         "hist": one_dim_array,
-        "image_feature": image_feature
+        "image_feature": image_feature,
+        "image_rgb": image_bgr,
+        "image_shape_row": image_shape[0],
+        "image_shape_col": image_shape[1],
+        "image_shape_channel": image_shape[2]
     })
 
 

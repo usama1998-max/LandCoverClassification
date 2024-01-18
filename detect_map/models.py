@@ -20,3 +20,9 @@ class ImageSimilarity(models.Model):
     img_result = models.FileField(upload_to="user_imgs_similarity", default="", null=True, blank=True)
     img_similarity_score = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
 
+
+class ImageRGB(models.Model):
+    img_id = models.OneToOneField(Images, on_delete=models.CASCADE, primary_key=True)
+    rgb = models.FileField(upload_to="rgb_imgs", default="")
+    canny = models.FileField(upload_to="rgb_imgs", default="")
+
